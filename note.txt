@@ -20,6 +20,7 @@ Vào https://developers.facebook.com/ => (Click) My Apps => (Click) Tạo ứng 
 (Click) Cài đặt => (Click) Thông tin cơ bản => Copy và paste 2 field ID ứng dụng, Khóa bí mật của ứng dụng ra notepad. Tại miền ứng dụng
 gõ: đường link mà ta deploy cái dự án lúc vừa khởi tạo ra trên heroku hoặc vercel hoặc digital ocean (hoặc lấy một đường link website bất kỳ nào cũng được)
 => (Click) Lưu thay đổi => Chế độ của ứng dụng: Chuyển từ chế độ (Phát triển) sang chế độ (Chính thức)
+Trong mục: Đăng nhập bằng Facebook => Chọn Cài đặt => Điền url callback tại đây (domain + /auth/facebook/callback) (vd: https://laravel-social-nguyenkien12345.vercel.app/auth/facebook/callback)
 Vào config/services.php thêm cấu hình sau
 'facebook' => [
     'client_id' => '863895371598980',
