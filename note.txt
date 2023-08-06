@@ -124,7 +124,7 @@ vendor
 - Bước 5: Gõ
 1) vercel .
 - Ở câu hỏi: Set up and deploy ..... ? (Chọn Y)
-- Ở câu hỏi: Which scope do you want to deploy to ? (Chọn bob)
+- Ở câu hỏi: Which scope do you want to deploy to ? (Chọn nguyenkien12345)
 - Ở câu hỏi: Link to existing project ? (Chọn N)
 - Ở câu hỏi: What's your project's name ? (Tự đặt tên)
 - Ở câu hỏi: In which directory is your code located ? (Gõ ./)
