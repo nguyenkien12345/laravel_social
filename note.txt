@@ -32,11 +32,13 @@ Trong đó:
 - c68a847ac073ae338d0b89c9e3063503 là Khóa bí mật của ứng dụng
 
 Lưu ý:
-Để có thể chạy trên https ta phải thêm 1 đoạn code nữa như sau:
-Vào AppServiceProvider.php => Trong public function boot() {} => Ta thêm vào bên trong đoạn code như sau:
+- Để có thể chạy trên https ta phải thêm 1 đoạn code nữa như sau:
+- Vào AppServiceProvider.php => Trong public function boot() {} => Ta thêm vào bên trong đoạn code như sau:
 if(app()->environment('remote')) {
     URL::forceScheme('https');
 }
+Lưu ý: Ta cũng phải thay đổi biến APP_URL env:
+APP_URL=https://laravel-social-nguyenkien12345.vercel.app
 ---------------------------------------------------------------------------------------------------------------
 
 ---------------------------------------------- Setup đăng nhập bằng Google ----------------------------------------------
