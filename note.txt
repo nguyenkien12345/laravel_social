@@ -1,0 +1,135 @@
+---------------------------------------------- CÀI ĐẶT Socialite ----------------------------------------------
++ Socialite là một gói chuyên xây dựng xác thực người dùng thông qua các mạng xã hội thông dụng như Facebook, Google, Twitter, Github,...
+
++ Cài đặt gói bằng composer:
+composer require laravel/socialite
+
++ Thêm provider vào file config/app.php
+'providers' => [
+    ...
+    Laravel\Socialite\SocialiteServiceProvider::class
+]
+
++ Thêm alias
+'Socialite' => Laravel\Socialite\Facades\Socialite::class
+---------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------- Setup đăng nhập bằng facebook ----------------------------------------------
+Vào https://developers.facebook.com/ => (Click) My Apps => (Click) Tạo ứng dụng => (Click) Không có => (Click) Tiếp => Đặt tên hiển thị
+=> Kiểm tra lại email => (Click) Tạo ứng dụng
+(Click) Cài đặt => (Click) Thông tin cơ bản => Copy và paste 2 field ID ứng dụng, Khóa bí mật của ứng dụng ra notepad. Tại miền ứng dụng
+gõ: đường link mà ta deploy cái dự án lúc vừa khởi tạo ra trên heroku hoặc vercel hoặc digital ocean (hoặc lấy một đường link website bất kỳ nào cũng được)
+=> (Click) Lưu thay đổi => Chế độ của ứng dụng: Chuyển từ chế độ (Phát triển) sang chế độ (Chính thức)
+Vào config/services.php thêm cấu hình sau
+'facebook' => [
+    'client_id' => '863895371598980',
+    'client_secret' => 'c68a847ac073ae338d0b89c9e3063503',
+    'redirect' => '/auth/facebook/callback',
+],
+Trong đó:
+- 863895371598980 là ID ứng dụng
+- c68a847ac073ae338d0b89c9e3063503 là Khóa bí mật của ứng dụng
+---------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------- Setup đăng nhập bằng Google ----------------------------------------------
+Vào https://console.cloud.google.com/apis/dashboard => (Click) Credentials => (Click) CREATE CREDENTIALS => (Click) API key =>
+Sau khi tạo API key xong thì lưu lại vào notepad => (Click) CREATE CREDENTIALS => (Click) OAuth client ID => (Click) CONFIGURE CONSENT SCREEN => (Click)
+External => (Click) CREATE => Sau đó setup các thông tin cần thiết => (Click) Save and Continue =>
+Trong mục chọn Application type => (Chọn) Web application => Đặt tên cho ứng dụng => Điền vào URIs 1 của Authorized JavaScript origins (http://127.0.0.1:8000)
+=> URIs 1 của Authorized redirect URIs (http://127.0.0.1:8000/auth/google/callback) => (Click) CREATE => Hiện thị lên modal chứa 2 thông tin lần lượt là Your Client ID và Your Client Secret (Copy 2 thông số này ra notepad)
+Vào config/services.php thêm cấu hình sau
+'google' => [
+    'client_id' => '725536849994-j3gt427c3i3m4b0j12qbu25bm76spmjh.apps.googleusercontent.com',
+    'client_secret' => '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',
+    'redirect' => '/auth/google/callback',
+],
+Trong đó:
+- Your Client ID là client_id
+- Your Client Secret là client_secret
+---------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------- Setup đăng nhập bằng Github ----------------------------------------------
+Vào https://github.com/ => Vào Account => (Chọn) Settings => (Nhìn bên Sidebar) (Click) Developer settings => (Click) New Github App => (Nhập lại mật khẩu)
+=> Đặt tên cho app (Github App name) => (Homepage URL) Gõ: http://127.0.0.1:8000/ => (Callback URL) Gõ: http://127.0.0.1:8000/auth/github/callback
+=> Trong (Webhook/Webhook URL) Gõ: https://laravel-social-nguyentrungkien.vercel.app/ => (Click) Create Github App => Copy App ID và Client IP ra notepad
+=> Trong (Client Secrets) (Click) Generate a new client secret => Copy Client secrets ra notepad
+Vào config/services.php thêm cấu hình sau
+'github' => [
+    'client_id' => 'Iv1.43d9d180a4082740',
+    'client_secret' => '3e6fe49122b109791a85362c8d87f33d364268a7',
+    'redirect' => '/auth/github/callback',
+],
+Trong đó:
+- Client ID là client_id
+- Client secrets là client_secret
+---------------------------------------------------------------------------------------------------------------
+
+Hướng dẫn cài và sử dụng CKEditor, CKFinder
+- Để cài CKEditor => Vào https://ckeditor.com/ckeditor-4/download/?null-addons= => Cài bản Standard Package
+- Để cài CKFinder => Vào https://ckeditor.com/ckfinder/download/
+- CKEditor thường dùng để định dạng văn bản, nội dung (Không hỗ trợ tải ảnh từ dưới máy tính lên)
+- CKFinder thường dùng để upload ảnh (Hỗ trợ tải ảnh từ dưới máy tính lên)
+- Khi tích hợp CKFinder vào CKEditor nếu như gặp lỗi
+The file browser is disabled for security reasons. Please contact your system administrator and check the CKFinder configuration file
+=> Thì vào trong file config.php trong folder ckfinder/ckfinder tìm đếm đoạn code
+$config['authentication'] = function () {
+    return false;
+};
+Lúc này ta chỉ cần chuyển từ false về true là được
+---------------------------------------------------------------------------------------------------------------
+
+---------------------------------------------- Setup deploy vercel ----------------------------------------------
+- Bước 1: Tạo 1 folder api/index.php (Ngay tại root)
+Nội dung trong file index.php như sau:
+<?php
+require __DIR__ . '/../public/index.php';
+
+- Bước 2: Tạo 1 file vercel.json (Ngay tại root)
+Nội dung trong file như sau:
+{
+    "version": 2,
+      "framework": null,
+    "functions": {
+        "api/index.php": { "runtime": "vercel-php@0.6.0" }
+    },
+    "routes": [{
+        "src": "/(.*)",
+        "dest": "/api/index.php"
+    }],
+    "env": {
+        "APP_ENV": "production",
+        "APP_DEBUG": "true",
+        "APP_URL": "https://yourproductionurl.com",
+
+        "APP_CONFIG_CACHE": "/tmp/config.php",
+        "APP_EVENTS_CACHE": "/tmp/events.php",
+        "APP_PACKAGES_CACHE": "/tmp/packages.php",
+        "APP_ROUTES_CACHE": "/tmp/routes.php",
+        "APP_SERVICES_CACHE": "/tmp/services.php",
+        "VIEW_COMPILED_PATH": "/tmp",
+
+        "CACHE_DRIVER": "array",
+        "LOG_CHANNEL": "stderr",
+        "SESSION_DRIVER": "cookie"
+    }
+}
+
+- Bước 3: Tạo 1 file .vercelignore (Ngay tại root)
+Nội dung trong file như sau:
+./vendor
+vendor
+
+- Bước 4: Tạo 1 folder dist (Ngay tại root)
+
+- Bước 5: Gõ
+1) vercel .
+- Ở câu hỏi: Set up and deploy ..... ? (Chọn Y)
+- Ở câu hỏi: Which scope do you want to deploy to ? (Chọn bob)
+- Ở câu hỏi: Link to existing project ? (Chọn N)
+- Ở câu hỏi: What's your project's name ? (Tự đặt tên)
+- Ở câu hỏi: In which directory is your code located ? (Gõ ./)
+- Ở câu hỏi: Want to modify these settings (Chọn N)
+-> Trong quá trình deploy nếu gặp lỗi Error: The Output Directory "dist" is empty
+-> Vào tài khoản (trang vercel của chúng ta) => Chọn dự án ta muốn delploy => Vào mục Settings (thanh menu) => Tại mục
+Build & Development Settings => Tìm đến Output Directory => Chọn Override => Gõ vào ô input là: public => Click Save
+Sau đó thực hiện deploy lại
