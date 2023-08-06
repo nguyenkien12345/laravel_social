@@ -7,6 +7,10 @@ Route::get('', function(){
     return view('welcome');
 });
 
+route::get('/chinh-sach-rieng-tu', function(){
+    return '<h1>Chính sách riêng tư</h1>';
+});
+
 Route::get('/auth/google', [SocialController::class, 'redirectGoogle'])->name('redirect-google');
 Route::get('/auth/google/callback', [SocialController::class, 'loginGoogle'])->name('login-google');
 
