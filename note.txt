@@ -30,6 +30,13 @@ Vào config/services.php thêm cấu hình sau
 Trong đó:
 - 863895371598980 là ID ứng dụng
 - c68a847ac073ae338d0b89c9e3063503 là Khóa bí mật của ứng dụng
+
+Lưu ý:
+Để có thể chạy trên https ta phải thêm 1 đoạn code nữa như sau:
+Vào AppServiceProvider.php => Trong public function boot() {} => Ta thêm vào bên trong đoạn code như sau:
+if(app()->environment('remote')) {
+    URL::forceScheme('https');
+}
 ---------------------------------------------------------------------------------------------------------------
 
 ---------------------------------------------- Setup đăng nhập bằng Google ----------------------------------------------
